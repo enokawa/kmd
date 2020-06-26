@@ -1,12 +1,14 @@
 package main
 
 import (
-	// "context"
+	"context"
 	"flag"
 	"fmt"
 	"path/filepath"
 
-	// "k8s.io/client-go/kubernetes"
+	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/homedir"
 )
@@ -25,27 +27,30 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Printf(config.Host)
-
-	// clientset, err := kubernetes.NewForConfig(config)
-	// if err != nil {
-	// 	panic(err)
-	// }
+	clientset, err := kubernetes.NewForConfig(config)
+	if err != nil {
+		panic(err)
+	}
 
 	// Get Nodes
-	// nodesClient := clientset.NodeV1alpha1()
-	// get := nodesClient.RESTClient().Get().Do(context.TODO())
-	// err = get.Error()
-	// if err != nil {
-	// 	panic(err)
-	// }
+	nodesClient := clientset.CoreV1().Nodes()
+	nodeList, err := nodesClient.List(context.TODO(), metav1.ListOptions{})
+	if err != nil {
+		panic(err)
+	}
 
-	// getRaw, err := get.Raw()
-	// if err != nil {
-	// 	panic(err)
-	// }
-
-	// fmt.Printf("%s", getRaw)
+	for _, node := range nodeList.Items {
+		fmt.Printf("Name: %s \n", node.Name)
+		for _, condition := range node.Status.Conditions {
+			if condition.Type != v1.NodeReady {
+				continue
+			}
+			if condition.Status == v1.ConditionTrue {
+				fmt.Printf("Status: %s \n", condition.Type)
+				break
+			}
+			fmt.Println("Status: NotReady")
+			break
+		}
+	}
 }
-
-// func int32Ptr(i int32) *int32 { return &i }
