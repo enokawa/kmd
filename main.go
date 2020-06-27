@@ -58,11 +58,10 @@ func main() {
 		if err != nil {
 			panic(err)
 		}
-		
+
 		roles := []string{}
 		for key, _ := range nodeLabels {
 			if strings.Contains(key, "node-role.kubernetes.io") {
-				// fmt.Printf("%q\n", strings.Split(key, "/"))
 				roleLabel := strings.Split(key, "/")
 				roles = append(roles, roleLabel[1])
 			}
