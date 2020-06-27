@@ -5,6 +5,7 @@ import (
 	"flag"
 	"fmt"
 	"path/filepath"
+	"strings"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -52,5 +53,20 @@ func main() {
 			fmt.Println("Status: NotReady")
 			break
 		}
+
+		nodeLabels := node.GetLabels()
+		if err != nil {
+			panic(err)
+		}
+		
+		roles := []string{}
+		for key, _ := range nodeLabels {
+			if strings.Contains(key, "node-role.kubernetes.io") {
+				// fmt.Printf("%q\n", strings.Split(key, "/"))
+				roleLabel := strings.Split(key, "/")
+				roles = append(roles, roleLabel[1])
+			}
+		}
+		fmt.Printf("Roles: %s \n", roles[0])
 	}
 }
