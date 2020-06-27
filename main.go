@@ -66,6 +66,7 @@ func main() {
 				roles = append(roles, roleLabel[1])
 			}
 		}
-		fmt.Printf("Roles: %s \n", roles[0])
+
+		fmt.Printf("Roles: %s \n", strings.Join(roles, ","))
 	}
 }
