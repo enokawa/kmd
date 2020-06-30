@@ -76,5 +76,11 @@ func main() {
 		} else if roles == nil {
 			fmt.Println("Roles: <none>")
 		}
+
+		// Get Node AGE
+		fmt.Printf("Age: %s \n", node.CreationTimestamp)
+
+		// Get Node VERSION
+		fmt.Printf("Version: %s \n", node.Status.NodeInfo.KubeletVersion)
 	}
 }
