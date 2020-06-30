@@ -41,7 +41,10 @@ func main() {
 	}
 
 	for _, node := range nodeList.Items {
+		// Get Node NAME
 		fmt.Printf("Name: %s \n", node.Name)
+
+		// Get Node STATUS
 		for _, condition := range node.Status.Conditions {
 			if condition.Type != v1.NodeReady {
 				continue
@@ -54,6 +57,7 @@ func main() {
 			break
 		}
 
+		// Get Node ROLES
 		nodeLabels := node.GetLabels()
 		if err != nil {
 			panic(err)
