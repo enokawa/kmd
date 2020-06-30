@@ -59,7 +59,7 @@ func main() {
 			panic(err)
 		}
 
-		roles := []string{}
+		var roles []string
 		for key, _ := range nodeLabels {
 			if strings.Contains(key, "node-role.kubernetes.io") {
 				roleLabel := strings.Split(key, "/")
@@ -67,6 +67,10 @@ func main() {
 			}
 		}
 
-		fmt.Printf("Roles: %s \n", strings.Join(roles, ","))
+		if len(roles) > 0 {
+			fmt.Printf("Roles: %s \n", strings.Join(roles, ","))
+		} else if roles == nil {
+			fmt.Println("Roles: <none>")
+		}
 	}
 }
