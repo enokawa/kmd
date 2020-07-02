@@ -73,7 +73,7 @@ func main() {
 
 		if len(roles) > 0 {
 			fmt.Printf("Roles: %s \n", strings.Join(roles, ","))
-		} else if roles == nil {
+		} else {
 			fmt.Println("Roles: <none>")
 		}
 
